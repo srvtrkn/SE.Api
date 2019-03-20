@@ -5,6 +5,7 @@ using SE.Service.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using SE.Service.Helpers;
 
 namespace SE.Api.Controllers
 {
@@ -22,6 +23,8 @@ namespace SE.Api.Controllers
         public async Task<IActionResult> Login()
         {
             var result = await _authService.Login();
+            var e = JsonConvert.SerializeObject(new Token { Id = 1 });
+            result.ResponseMessage = HashingHelper.Encrypt(e);
             return Ok(result);
         }
         [HttpPost]
@@ -29,7 +32,8 @@ namespace SE.Api.Controllers
         {
             if (Request.Headers.TryGetValue("seVerificationToken", out tokenHeaders))
             {
-                Token uiToken = JsonConvert.DeserializeObject<Token>(tokenHeaders[0]);
+                var d = HashingHelper.Decrypt(tokenHeaders[0]);
+                Token uiToken = JsonConvert.DeserializeObject<Token>(d);
                 var result = await _authService.Deneme(uiToken);
                 return Ok(result);
             }
