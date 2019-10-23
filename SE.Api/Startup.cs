@@ -1,12 +1,12 @@
 ﻿using SE.DataObjects;
 using SE.Service.Auth;
-using SE.Service.DbOperation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using SE.Service.Student;
 
 namespace SE.Api
 {
@@ -28,11 +28,10 @@ namespace SE.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.Configure<ConnectionString>(Configuration.GetSection("ConnectionString"));
-
+            
             // Servis Tanımları 
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IDbOperation, DbOperation>();
+            services.AddTransient<IStudentService, StudentService>();
 
 
 

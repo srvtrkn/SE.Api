@@ -6,7 +6,6 @@ namespace SE.Service.Auth
 {
     public interface IAuthService
     {
-        Task<EntityResponse<AuthDto>> Login();
-        Task<EntityResponse<bool>> Deneme(Token token);
+        Task<EntityResponse<UserDto>> Login(AuthDto authDto);
     }
 }
