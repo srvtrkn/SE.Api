@@ -11,16 +11,19 @@ namespace SE.Service
 {
     public class DbOperation
     {
-        private static DbConnection _db;
+        private static string connectionString;
+        static DbOperation()
+        {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = AppSettingsHelper.GetProperty("ConnectionString", "SqlConnectionString");
+            }
+        }
         private static DbConnection DB
         {
             get
             {
-                if (_db == null)
-                {
-                    _db = new SqlConnection(AppSettingsHelper.GetProperty("ConnectionString", "SqlConnectionString"));
-                }
-                return _db;
+                return new SqlConnection(connectionString);
             }
         }
         public static List<T> RunQuery<T>(string query)
@@ -35,6 +38,5 @@ namespace SE.Service
             DB.Close();
             return result.ToList();
         }
-
     }
 }
